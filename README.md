@@ -25,11 +25,47 @@ CCIS/
 └── appsettings.json
 ```
 
-## Run It
+## Setup & Run
 
-1. Install the .NET 8 SDK.
-2. Open the `CCIS.csproj` project in Visual Studio or VS Code.
-3. Run the app with `dotnet run` from the project directory.
+Prerequisites:
+
+- **.NET SDK:** Install .NET 10 SDK (recommended) or the matching runtime. Verify with:
+
+```powershell
+dotnet --version
+dotnet --list-runtimes
+```
+
+Quick start (project directory):
+
+```powershell
+dotnet restore
+dotnet build
+dotnet run
+# or for live reload while editing:
+dotnet watch run
+```
+
+Local URLs (from `Properties/launchSettings.json`):
+
+- http://localhost:5080
+- https://localhost:7080
+
+If you need HTTPS without browser warnings (developer cert):
+
+```powershell
+dotnet dev-certs https --trust
+```
+
+IDE options:
+
+- **Visual Studio:** Open the solution `CCIS.sln` and press F5 (or Ctrl+F5 to run without debugger).
+- **VS Code:** Open the folder, install the C# extension, then use the Run view or the integrated terminal to run the commands above.
+
+Troubleshooting:
+
+- If the app reports a missing runtime (e.g., requires `Microsoft.NETCore.App` 8.0.0), install the matching runtime or retarget the project in `CCIS.csproj` by changing `<TargetFramework>`.
+- If Razor compilation errors reference tag helpers in attributes (RZ1031), avoid inline C# in element attributes; use conditional rendering in views instead.
 
 ## Notes
 
