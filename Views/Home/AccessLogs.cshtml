@@ -1,0 +1,145 @@
+@model AccessLogsViewModel
+
+<section class="stack-lg">
+    <form class="toolbar filter-toolbar" method="get">
+        <input class="input" type="search" name="searchQuery" value="@Model.SearchQuery" placeholder="Search by name or employee ID..." />
+
+        <select class="input" name="statusFilter">
+            @if (Model.StatusFilter == "all")
+            {
+                <option value="all" selected>All Status</option>
+            }
+            else
+            {
+                <option value="all">All Status</option>
+            }
+            @if (Model.StatusFilter == "granted")
+            {
+                <option value="granted" selected>Granted</option>
+            }
+            else
+            {
+                <option value="granted">Granted</option>
+            }
+            @if (Model.StatusFilter == "denied")
+            {
+                <option value="denied" selected>Denied</option>
+            }
+            else
+            {
+                <option value="denied">Denied</option>
+            }
+        </select>
+
+        <select class="input" name="directionFilter">
+            @if (Model.DirectionFilter == "all")
+            {
+                <option value="all" selected>All Directions</option>
+            }
+            else
+            {
+                <option value="all">All Directions</option>
+            }
+            @if (Model.DirectionFilter == "in")
+            {
+                <option value="in" selected>Entry</option>
+            }
+            else
+            {
+                <option value="in">Entry</option>
+            }
+            @if (Model.DirectionFilter == "out")
+            {
+                <option value="out" selected>Exit</option>
+            }
+            else
+            {
+                <option value="out">Exit</option>
+            }
+        </select>
+
+        <select class="input" name="dateFilter">
+            @if (Model.DateFilter == "today")
+            {
+                <option value="today" selected>Today</option>
+            }
+            else
+            {
+                <option value="today">Today</option>
+            }
+            @if (Model.DateFilter == "week")
+            {
+                <option value="week" selected>This Week</option>
+            }
+            else
+            {
+                <option value="week">This Week</option>
+            }
+            @if (Model.DateFilter == "month")
+            {
+                <option value="month" selected>This Month</option>
+            }
+            else
+            {
+                <option value="month">This Month</option>
+            }
+            @if (Model.DateFilter == "all")
+            {
+                <option value="all" selected>All Time</option>
+            }
+            else
+            {
+                <option value="all">All Time</option>
+            }
+        </select>
+
+        <button class="btn btn-secondary" type="submit">Apply Filters</button>
+    </form>
+
+    <div class="metric-grid metric-grid-4">
+        @foreach (var summary in Model.Summaries)
+        {
+            <article class="panel summary-card @summary.ValueClass">
+                <span class="eyebrow">@summary.Label</span>
+                <strong>@summary.Value</strong>
+            </article>
+        }
+    </div>
+
+    <article class="panel panel-strong table-panel">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>User</th>
+                    <th>Employee ID</th>
+                    <th>Direction</th>
+                    <th>Status</th>
+                    <th>Confidence</th>
+                    <th>Location</th>
+                    <th>Snapshot</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model.Logs)
+                {
+                    <tr>
+                        <td>@log.Timestamp.ToString("MMM d, HH:mm:ss")</td>
+                        <td>
+                            <div class="table-user">
+                                <span class="avatar-sm @(log.UserName == "Unknown" ? "avatar-muted" : "")">@log.Initials</span>
+                                <strong>@log.UserName</strong>
+                            </div>
+                        </td>
+                        <td>@log.EmployeeId</td>
+                        <td>@log.Direction</td>
+                        <td><span class="badge @(log.Status == "granted" ? "badge-success" : "badge-danger")">@log.Status</span></td>
+                        <td>@log.Confidence%</td>
+                        <td>@log.Location</td>
+                        <td><button class="btn btn-secondary btn-sm" type="button">View</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </article>
+</section>

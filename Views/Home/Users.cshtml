@@ -1,0 +1,54 @@
+@model UserManagementViewModel
+
+<section class="stack-lg">
+    <div class="toolbar">
+        <form class="toolbar-search" method="get">
+            <input class="input" type="search" name="searchQuery" value="@Model.SearchQuery" placeholder="Search users..." />
+            <button class="btn btn-secondary" type="submit">Search</button>
+        </form>
+
+        <button class="btn btn-primary" type="button">Add User</button>
+    </div>
+
+    <article class="panel panel-strong table-panel">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Employee ID</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Face Enrolled</th>
+                    <th>Last Access</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td>
+                            <div class="table-user">
+                                <span class="avatar-sm">@user.Initials</span>
+                                <strong>@user.Name</strong>
+                            </div>
+                        </td>
+                        <td>@user.EmployeeId</td>
+                        <td>@user.Role</td>
+                        <td>@user.Department</td>
+                        <td><span class="badge @(user.Status == "active" ? "badge-success" : "badge-danger")">@user.Status</span></td>
+                        <td>@(user.FaceEnrolled ? "Yes" : "No")</td>
+                        <td>@(user.LastAccess is null ? "Never" : user.LastAccess.Value.ToString("MMM d, HH:mm"))</td>
+                        <td>
+                            <div class="action-set">
+                                <button class="btn btn-secondary btn-sm" type="button">Edit</button>
+                                <button class="btn btn-danger btn-sm" type="button">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </article>
+</section>

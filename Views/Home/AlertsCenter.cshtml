@@ -1,0 +1,117 @@
+@model AlertsCenterViewModel
+
+<section class="stack-lg">
+    <div class="metric-grid metric-grid-4">
+        <article class="panel summary-card summary-total">
+            <span class="eyebrow">Total Alerts</span>
+            <strong>@Model.TotalCount</strong>
+        </article>
+        <article class="panel summary-card summary-danger">
+            <span class="eyebrow">Critical</span>
+            <strong>@Model.CriticalCount</strong>
+        </article>
+        <article class="panel summary-card summary-warning">
+            <span class="eyebrow">Warnings</span>
+            <strong>@Model.WarningCount</strong>
+        </article>
+        <article class="panel summary-card summary-primary">
+            <span class="eyebrow">Unacknowledged</span>
+            <strong>@Model.UnacknowledgedCount</strong>
+        </article>
+    </div>
+
+    <form class="toolbar filter-toolbar" method="get">
+        <select class="input" name="filter">
+            @if (Model.Filter == "all")
+            {
+                <option value="all" selected>All Alerts</option>
+            }
+            else
+            {
+                <option value="all">All Alerts</option>
+            }
+            @if (Model.Filter == "critical")
+            {
+                <option value="critical" selected>Critical Only</option>
+            }
+            else
+            {
+                <option value="critical">Critical Only</option>
+            }
+            @if (Model.Filter == "warning")
+            {
+                <option value="warning" selected>Warnings Only</option>
+            }
+            else
+            {
+                <option value="warning">Warnings Only</option>
+            }
+            @if (Model.Filter == "normal")
+            {
+                <option value="normal" selected>Normal Only</option>
+            }
+            else
+            {
+                <option value="normal">Normal Only</option>
+            }
+            @if (Model.Filter == "unacknowledged")
+            {
+                <option value="unacknowledged" selected>Unacknowledged</option>
+            }
+            else
+            {
+                <option value="unacknowledged">Unacknowledged</option>
+            }
+            @if (Model.Filter == "acknowledged")
+            {
+                <option value="acknowledged" selected>Acknowledged</option>
+            }
+            else
+            {
+                <option value="acknowledged">Acknowledged</option>
+            }
+        </select>
+        <button class="btn btn-secondary" type="submit">Apply</button>
+    </form>
+
+    <div class="stack-md">
+        @if (!Model.Alerts.Any())
+        {
+            <article class="panel empty-state compact">
+                <div class="empty-icon">◌</div>
+                <h3>No alerts found</h3>
+                <p>No alerts match the current filter criteria.</p>
+            </article>
+        }
+        else
+        {
+            foreach (var alert in Model.Alerts)
+            {
+                <article class="panel alert-card @(alert.Acknowledged ? "alert-muted" : alert.AccentClass)">
+                    <div class="alert-grid">
+                        <div class="alert-icon">@alert.IconLabel</div>
+                        <div class="alert-copy">
+                            <div class="alert-title-row">
+                                <h3>@alert.Title</h3>
+                                <span class="badge badge-neutral">@alert.Type</span>
+                                @if (!alert.Acknowledged)
+                                {
+                                    <span class="badge badge-primary">New</span>
+                                }
+                            </div>
+                            <p>@alert.Message</p>
+                            <div class="alert-meta">
+                                <span>@alert.Timestamp.ToString("MMM d, HH:mm")</span>
+                                <span>@alert.Location</span>
+                            </div>
+                        </div>
+                        <div class="alert-actions">
+                            <button class="btn btn-success btn-sm" type="button">Acknowledge</button>
+                            <button class="btn btn-secondary btn-sm" type="button">Details</button>
+                        </div>
+                    </div>
+                </article>
+            }
+        }
+    </div>
+</section>

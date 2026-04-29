@@ -1,0 +1,108 @@
+@model FaceAccessViewModel
+
+<section class="stack-lg">
+    <div class="three-column-grid">
+        <article class="panel panel-strong">
+            <div class="panel-head">
+                <h2>Camera Feed</h2>
+                <span class="eyebrow">Prototype view</span>
+            </div>
+
+            <div class="camera-stage @(Model.CameraActive ? "camera-on" : "camera-off")">
+                @if (!Model.CameraActive)
+                {
+                    <div class="empty-state">
+                        <div class="empty-icon">◌</div>
+                        <h3>Camera inactive</h3>
+                        <p>Start the camera to begin recognition.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="live-scene">
+                        <div class="scan-frame"></div>
+                        <div class="scan-text">Camera Active</div>
+                    </div>
+                }
+            </div>
+
+            <div class="button-row">
+                <button class="btn btn-primary" type="button">Start Camera</button>
+                <button class="btn btn-secondary" type="button">Capture Face</button>
+                <button class="btn btn-danger" type="button">Stop</button>
+            </div>
+        </article>
+
+        <article class="panel">
+            <div class="panel-head">
+                <h2>Recognition Result</h2>
+            </div>
+
+            @if (Model.RecognitionResult is null)
+            {
+                <div class="empty-state compact">
+                    <div class="empty-icon">◌</div>
+                    <h3>No face captured yet</h3>
+                    <p>Recognition details appear here after capture.</p>
+                </div>
+            }
+            else
+            {
+                <div class="recognition-card">
+                    <div class="avatar-lg">@Model.RecognitionResult.Initials</div>
+                    <div class="recognition-meta">
+                        <div>
+                            <span class="eyebrow">Name</span>
+                            <strong>@Model.RecognitionResult.Name</strong>
+                        </div>
+                        <div>
+                            <span class="eyebrow">Employee ID</span>
+                            <strong>@Model.RecognitionResult.EmployeeId</strong>
+                        </div>
+                        <div class="dual-row">
+                            <div>
+                                <span class="eyebrow">Status</span>
+                                <span class="badge badge-success">@Model.RecognitionResult.Status</span>
+                            </div>
+                            <div>
+                                <span class="eyebrow">Confidence</span>
+                                <strong>@Model.RecognitionResult.Confidence%</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button class="btn btn-success" type="button">Check In</button>
+                    <button class="btn btn-warning" type="button">Check Out</button>
+                </div>
+            }
+        </article>
+
+        <article class="panel">
+            <div class="panel-head">
+                <h2>Quick Actions</h2>
+            </div>
+
+            <div class="quick-actions">
+                @foreach (var action in Model.QuickActions)
+                {
+                    <button class="btn btn-block btn-@action.Variant" type="button">@action.Label</button>
+                }
+            </div>
+
+            <div class="mini-feed">
+                <div class="panel-head compact-head">
+                    <h3>Recent Events</h3>
+                </div>
+                @foreach (var eventItem in Model.RecentEvents)
+                {
+                    <div class="mini-feed-row">
+                        <span>@eventItem.UserName</span>
+                        <strong>@eventItem.TimeAgo</strong>
+                    </div>
+                }
+            </div>
+        </article>
+    </div>
+</section>

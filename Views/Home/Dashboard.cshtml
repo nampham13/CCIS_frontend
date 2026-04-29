@@ -1,0 +1,80 @@
+@model DashboardViewModel
+
+<section class="stack-lg">
+    <div class="metric-grid">
+        @foreach (var kpi in Model.Kpis)
+        {
+            <article class="panel metric-card @kpi.ColorClass">
+                <div class="metric-top">
+                    <span class="eyebrow">@kpi.Title</span>
+                    <span class="metric-trend @kpi.TrendClass">@kpi.Change</span>
+                </div>
+                <div class="metric-value">@kpi.Value</div>
+            </article>
+        }
+    </div>
+
+    <div class="two-column-grid">
+        <article class="panel panel-strong">
+            <div class="panel-head">
+                <h2>Recent Access Events</h2>
+                <span class="eyebrow">Live feed</span>
+            </div>
+
+            <div class="event-list">
+                @foreach (var eventItem in Model.RecentEvents)
+                {
+                    <div class="event-row">
+                        <div class="event-icon @(eventItem.Status == "granted" ? "event-success" : "event-danger")">
+                            @(eventItem.Direction == "in" ? "IN" : "OUT")
+                        </div>
+                        <div class="event-copy">
+                            <strong>@eventItem.UserName</strong>
+                            <span>@eventItem.EmployeeId · @eventItem.Location</span>
+                        </div>
+                        <div class="event-meta">
+                            <span class="badge @(eventItem.Status == "granted" ? "badge-success" : "badge-danger")">@eventItem.Status</span>
+                            <span>@eventItem.TimeAgo</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </article>
+
+        <div class="stack-md">
+            <article class="panel">
+                <div class="panel-head">
+                    <h2>System Status</h2>
+                </div>
+                <div class="status-stack">
+                    @foreach (var item in Model.SystemStatus)
+                    {
+                        <div class="status-row">
+                            <div>
+                                <strong>@item.Label</strong>
+                                <span>@item.Value</span>
+                            </div>
+                            <span class="badge @item.AccentClass">@item.State</span>
+                        </div>
+                    }
+                </div>
+            </article>
+
+            <article class="panel">
+                <div class="panel-head">
+                    <h2>Presence Summary</h2>
+                </div>
+                <div class="summary-stack">
+                    @foreach (var item in Model.PresenceSummary)
+                    {
+                        <div class="summary-row">
+                            <span>@item.Label</span>
+                            <strong>@item.Value</strong>
+                        </div>
+                    }
+                </div>
+                <div class="panel-foot">Updated @Model.LastUpdated</div>
+            </article>
+        </div>
+    </div>
+</section>

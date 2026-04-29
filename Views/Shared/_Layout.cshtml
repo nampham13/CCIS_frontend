@@ -1,0 +1,87 @@
+@{
+    var activePage = ViewData["ActivePage"]?.ToString() ?? "dashboard";
+    var pageTitle = ViewData["PageTitle"]?.ToString() ?? "CCIS";
+    var pageDescription = ViewData["PageDescription"]?.ToString() ?? "Smart Access Control";
+
+    var navItems = new[]
+    {
+        new { Id = "dashboard", Label = "Dashboard", Action = "Dashboard" },
+        new { Id = "face-access", Label = "Face Access", Action = "FaceAccess" },
+        new { Id = "users", Label = "User Management", Action = "Users" },
+        new { Id = "logs", Label = "Access Logs", Action = "AccessLogs" },
+        new { Id = "alerts", Label = "Alerts Center", Action = "AlertsCenter" },
+    };
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@pageTitle - CCIS</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="app-shell">
+    <div class="app-backdrop"></div>
+
+    <div class="shell-grid">
+        <aside class="sidebar">
+            <div class="sidebar-head">
+                <div class="brand-mark">CC</div>
+                <div>
+                    <div class="brand-title">CCIS</div>
+                    <div class="brand-subtitle">Smart Access Control</div>
+                </div>
+            </div>
+
+            <nav class="nav-rail">
+                @foreach (var item in navItems)
+                {
+                    <a class="nav-item @(activePage == item.Id ? "active" : "")" asp-controller="Home" asp-action="@item.Action">
+                        <span class="nav-indicator"></span>
+                        <span>@item.Label</span>
+                    </a>
+                }
+            </nav>
+
+            <div class="sidebar-foot">
+                <div class="sidebar-card">
+                    <span class="eyebrow">Current Role</span>
+                    <strong>IT Administrator</strong>
+                    <p>Operations, alerts, and access oversight.</p>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-column">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Control Center</p>
+                    <h1>@pageTitle</h1>
+                    <p class="page-subtitle">@pageDescription</p>
+                </div>
+
+                <div class="topbar-meta">
+                    <div class="status-chip status-online">
+                        <span class="status-dot"></span>
+                        <span data-clock>--:--:--</span>
+                    </div>
+                    <div class="profile-chip">
+                        <div class="profile-avatar">AU</div>
+                        <div>
+                            <strong>Admin User</strong>
+                            <span>IT Administrator</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="page-content">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
